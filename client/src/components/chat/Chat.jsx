@@ -7,7 +7,7 @@ import Message from "./messages/Messages";
 
 let socket;
 export default function Chat() {
-  const ENDPOINT = "192.168.2.34:5000/";
+  const ENDPOINT = "localhost:5000/";
 
   const { user, setUser } = useContext(userContext);
   const { room_id, room_name } = useParams();

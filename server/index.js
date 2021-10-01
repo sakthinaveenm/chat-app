@@ -2,21 +2,29 @@ const authRoutes = require("./routes/authRoutes");
 const express = require("express");
 var cookieParser = require("cookie-parser");
 const cors = require("cors");
+var bodyParser = require("body-parser");
+
 app = express();
+const corsOption = {
+  origin: "http://localhost:3000",
+  credential: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOption));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 const PORT = process.env.PORT || 5000;
 const { addUser, removeUser, getUser } = require("./helper");
 const mongoose = require("mongoose");
 app.use(authRoutes);
+
 app.use(express.json());
+// app.use(express.urlencoded());
+
 app.use(cookieParser());
-const corsOption = {
-  origin: "http://localhost:3000/",
-  credential: true,
-  optionSuccessStatus: 200,
-};
-app.use(cors(corsOption));
 const mongodb =
   "mongodb+srv://sakthinaveenm:sakthi123@chatapp.kyxei.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 

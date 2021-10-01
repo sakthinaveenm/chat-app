@@ -6,9 +6,45 @@ import Home from "./components/home/Home";
 import Chat from "./components/chat/Chat";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
-
+import axios from "axios";
 function App() {
   const [user, setUser] = useState(null);
+  useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        // console.log("Result" + name, email, password);
+
+        // const res = await fetch("http://localhost:5000/signup", {
+        //   mode: "no-cors",
+        //   method: "POST",
+        //   credentials: "include",
+        //   body: JSON.stringify({ name, email, password }),
+        //   headers: { "Content-Type": "application/json" },
+        // })
+        const res = await axios.get("http://localhost:5000/verifyuser");
+        // .then((res) => setData(JSON.stringify(res)))
+        // .catch((err) => console.log(err));
+        // console.log("respon", typeof respon);
+        // const data = respon;
+        // if (data) {
+        //   console.log(data);
+        //   console.log(data["data"]);
+        // if (data.data.user.errors) {
+        //   setEEmail(data.errors.email);
+        //   setEName(data.errors.name);
+        //   setEPassword(data.errors.password);
+        // }
+        // if (data.data.user) {
+        //   setUser(data.user);
+        // }
+        // }
+        // setUser(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    verifyUser();
+  });
   return (
     <div className="App">
       <Router>

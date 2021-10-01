@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { userContext } from "../../userContext";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Navbar from "../layout/Navbar";
 import { CCard, CCardBody } from "@coreui/react";
 import Box from "@mui/material/Box";
@@ -8,10 +8,11 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import RoomList from "./RoomList";
 import io from "socket.io-client";
+import axios from "axios";
 let socket;
 
 export default function Home() {
-  const ENDPOINT = "192.168.2.34:5000/";
+  const ENDPOINT = "localhost:5000/";
   const { user, setUser } = useContext(userContext);
   const [room, setRoom] = useState("");
   const [rooms, setRooms] = useState([]);
@@ -19,7 +20,7 @@ export default function Home() {
   useEffect(() => {
     socket = io(ENDPOINT);
     return () => {
-      socket.emit("disconnect");
+      socket.disconnect();
       socket.off();
     };
   }, [ENDPOINT]);
@@ -34,7 +35,7 @@ export default function Home() {
     socket.on("output-rooms", (rooms) => {
       setRooms(rooms);
     });
-  }, []);
+  }, [room]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,6 +43,9 @@ export default function Home() {
     console.log(room);
     setRoom("");
   };
+  if (!user) {
+    return <Redirect to="/login" />;
+  }
   return (
     <div>
       <Navbar />
@@ -53,7 +57,8 @@ export default function Home() {
       </Link>
       <CCard style={{ width: "400px" }}>
         <CCardBody>
-          <form>
+          welcome {user}
+          <form onSubmit={handleSubmit}>
             <Box
               component="form"
               sx={{
@@ -72,7 +77,7 @@ export default function Home() {
                 }}
               />
             </Box>
-            <Button onClick={handleSubmit} variant="contained">
+            <Button type="submit" variant="contained">
               Create Room
             </Button>
           </form>
